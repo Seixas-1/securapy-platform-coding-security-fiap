@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block titulo %}SecuraPy - IP {{ ip }}{% endblock %}
+{% block conteudo %}
+<h1>Relatorio do IP: {{ ip }}</h1>
+
+{% if erro %}
+    <p class="erro">{{ erro }}</p>
+{% else %}
+
+<div class="card">
+    <h3>Geolocalizacao</h3>
+    {% if geo %}
+        <p>Cidade: {{ geo.cidade }} | Regiao: {{ geo.regiao }} | Pais: {{ geo.pais }} | Org: {{ geo.org }}</p>
+    {% else %}
+        <p>Nao disponivel</p>
+    {% endif %}
+</div>
+
+{% if explicacao_ia %}
+<div class="card">
+    <h3>Explicacao do Assistente ({{ explicacao_ia.fonte }})</h3>
+    <p class="{{ explicacao_ia.classificacao|lower }}">{{ explicacao_ia.classificacao }}</p>
+    <p>{{ explicacao_ia.explicacao }}</p>
+</div>
+{% endif %}
+
+<div class="card">
+    <h3>Alertas ({{ alertas|length }})</h3>
+    <table>
+        <tr><th>Severidade</th><th>Regra</th><th>Descricao</th></tr>
+        {% for a in alertas %}
+        <tr>
+            <td class="{{ a.severidade }}">{{ a.severidade }}</td>
+            <td>{{ a.regra_nome }}</td>
+            <td>{{ a.descricao }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="card">
+    <h3>Eventos ({{ eventos|length }})</h3>
+    <table>
+        <tr><th>Timestamp</th><th>Fonte</th><th>Tipo</th><th>Detalhes</th></tr>
+        {% for e in eventos %}
+        <tr>
+            <td>{{ e.timestamp }}</td>
+            <td>{{ e.fonte }}</td>
+            <td>{{ e.tipo }}</td>
+            <td>{{ e.detalhes }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block titulo %}SecuraPy - Dashboard{% endblock %}
+{% block conteudo %}
+<h1>Resumo Geral</h1>
+
+{% if erro_banco %}
+    <p class="erro">Nao foi possivel conectar ao banco de dados agora. Tente novamente em instantes.</p>
+{% endif %}
+
+<div class="card">
+    <strong>Total de eventos:</strong> {{ total_eventos }} &nbsp;|&nbsp;
+    <strong>Total de alertas:</strong> {{ total_alertas }}
+</div>
+
+<div class="card">
+    <h3>Alertas por severidade</h3>
+    <table>
+        {% for severidade in ["CRITICA", "ALTA", "MEDIA", "BAIXA", "INFO"] %}
+        <tr>
+            <td class="{{ severidade }}">{{ severidade }}</td>
+            <td>{{ por_severidade.get(severidade, 0) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="card">
+    <h3>Top 10 IPs suspeitos</h3>
+    <table>
+        <tr><th>IP</th><th>Eventos</th><th></th></tr>
+        {% for item in top10 %}
+        <tr>
+            <td>{{ item.ip }}</td>
+            <td>{{ item.total }}</td>
+            <td><a href="{{ url_for('dashboard_buscar_ip', ip=item.ip) }}">ver detalhes</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="card">
+    <h3>Buscar IP</h3>
+    <form method="get" action="/dashboard/ip/0.0.0.0" onsubmit="event.preventDefault(); window.location = '/dashboard/ip/' + encodeURIComponent(this.ip.value);">
+        <input type="text" name="ip" placeholder="ex: 185.220.101.1" required>
+        <button type="submit">Buscar</button>
+    </form>
+</div>
+{% endblock %}

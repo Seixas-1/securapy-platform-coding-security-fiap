@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block titulo %}SecuraPy Platform{% endblock %}</title>
+    <style>
+        body { font-family: Segoe UI, Arial, sans-serif; background: #0f172a; color: #e2e8f0; margin: 0; }
+        header { background: #1e293b; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+        header a { color: #38bdf8; text-decoration: none; font-weight: bold; }
+        main { padding: 24px; max-width: 1000px; margin: 0 auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+        th, td { text-align: left; padding: 8px; border-bottom: 1px solid #334155; }
+        .card { background: #1e293b; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+        .CRITICA, .critico { color: #f87171; font-weight: bold; }
+        .ALTA { color: #fb923c; font-weight: bold; }
+        .MEDIA { color: #fbbf24; }
+        .BAIXA, .INFO { color: #94a3b8; }
+        .erro { background: #7f1d1d; color: #fecaca; padding: 10px; border-radius: 6px; }
+        input, button { padding: 8px; border-radius: 4px; border: 1px solid #334155; background: #0f172a; color: #e2e8f0; }
+        button { background: #0ea5e9; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('dashboard') }}">SecuraPy Platform</a>
+        {% if usuario %}
+            <span>{{ usuario.nome }} ({{ usuario.email }}) - nivel {{ usuario.nivel_acesso }}
+                | <a href="{{ url_for('logout') }}">Sair</a></span>
+        {% endif %}
+    </header>
+    <main>
+        {% block conteudo %}{% endblock %}
+    </main>
+</body>
+</html>

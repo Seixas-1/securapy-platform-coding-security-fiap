@@ -1,0 +1,54 @@
+services:
+  api:
+    build: .
+    container_name: securapy_api
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      MONGO_HOST: mongo
+      MYSQL_HOST: mysql
+    depends_on:
+      - mongo
+      - mysql
+    networks:
+      - securapy_net
+
+  mongo:
+    image: mongo:7
+    container_name: securapy_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - securapy_net
+
+  mysql:
+    image: mysql:8.0
+    container_name: securapy_mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - securapy_net
+
+volumes:
+  mongo_data:
+  mysql_data:
+
+networks:
+  securapy_net:
+    driver: bridge
